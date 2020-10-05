@@ -1,0 +1,49 @@
+Exercise 3: Linux problem solving
+
+● A short description of your troubleshooting process.
+
+	The service of Redis server wasn’t starting due to the misconfiguration in the Redis configuration file. 
+
+
+● Tell us what's wrong
+
+	When I checked the Joruralctl, I could see the below FATAL Error at line 108. This is where we specify the log file name. 
+
+  Oct 03 18:39:57 bhargava-lnx redis-server[36371]: *** FATAL CONFIG FILE ERROR ***
+  Oct 03 18:39:57 bhargava-lnx redis-server[36371]: Reading the configuration file, at line 108
+
+
+● Explain what you did to fix it
+
+  Service has been started after specifiying the correct Log File Path. I have changed the Path 
+
+    From:	logfile /var/log/redis-server.log
+
+    To:	logfile /var/log/redis/redis-server.log
+
+● Output:
+ 
+ root@bhargava-lnx:/home/bhargava# sudo systemctl status redis.service
+ redis-server.service - Advanced key-value store
+   Loaded: loaded (/lib/systemd/system/redis-server.service; enabled; vendor preset: enabled)
+   Active: active (running) since Sat 2020-10-03 18:47:02 UTC; 8s ago
+     Docs: http://redis.io/documentation,
+           man:redis-server(1)
+  Process: 37023 ExecStopPost=/bin/run-parts --verbose /etc/redis/redis-server.post-down.d (code=exited, status=0/SUCCESS)
+  Process: 37019 ExecStop=/bin/kill -s TERM $MAINPID (code=exited, status=0/SUCCESS)
+  Process: 37016 ExecStop=/bin/run-parts --verbose /etc/redis/redis-server.pre-down.d (code=exited, status=0/SUCCESS)
+  Process: 37046 ExecStartPost=/bin/run-parts --verbose /etc/redis/redis-server.post-up.d (code=exited, status=0/SUCCESS)
+  Process: 37042 ExecStart=/usr/bin/redis-server /etc/redis/redis.conf (code=exited, status=0/SUCCESS)
+  Process: 37029 ExecStartPre=/bin/run-parts --verbose /etc/redis/redis-server.pre-up.d (code=exited, status=0/SUCCESS)
+ Main PID: 37045 (redis-server)
+    Tasks: 3
+   Memory: 6.8M
+      CPU: 27ms
+   CGroup: /system.slice/redis-server.service
+           └─37045 /usr/bin/redis-server 127.0.0.1:6379
+
+Oct 03 18:47:02 bhargava-lnx systemd[1]: Stopped Advanced key-value store.
+Oct 03 18:47:02 bhargava-lnx systemd[1]: Starting Advanced key-value store...
+Oct 03 18:47:02 bhargava-lnx run-parts[37029]: run-parts: executing /etc/redis/redis-server.pre-up.d/00_example
+Oct 03 18:47:02 bhargava-lnx run-parts[37046]: run-parts: executing /etc/redis/redis-server.post-up.d/00_example
+Oct 03 18:47:02 bhargava-lnx systemd[1]: Started Advanced key-value store.
