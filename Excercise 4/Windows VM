@@ -1,0 +1,26 @@
+Exercise 4: Windows problem solving
+
+● A short description of your troubleshooting process.
+
+	Getting 503 Exception while browsing the “localhost” because DefaultAppPool wasn’t starting in the Internet Information Services (IIS) Manager.
+
+● Tell us what's wrong
+
+	The Application pool was configured with Custom account rather than Built-in Identity.
+
+● Explain what you did to fix it
+
+	DafaultAppPool has started after changing the Identity to “ApplicationPoolIdentity” as similar as the other pools.
+
+● Output:
+
+PS C:\Users\bhargava>  Get-IISAppPool "DefaultAppPool"
+
+Name                 Status       CLR Ver  Pipeline Mode  Start Mode
+----                 ------       -------  -------------  ----------
+DefaultAppPool       Started      v4.0     Integrated     OnDemand
+
+
+ 
+
+
